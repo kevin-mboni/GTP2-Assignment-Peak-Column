@@ -1,62 +1,73 @@
 import java.util.Scanner;
 
 public class Peak {
-    public static int [][] readArray(Scanner sc, int rows , int cols) {
-        System.out.println("Enter array element of ("+rows+","+cols+")");
-        int matrix [][] = new int[rows][cols];
-        for(int i = 0; i < rows; i ++) {
-            for(int j = 0; j < cols; j ++) {
+
+    //Method to read user input
+    public static int[][] readArray(Scanner sc, int rows, int cols) {
+        System.out.println("Enter array elements of (" + rows + "," + cols + "):");
+        int matrix[][] = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 matrix[i][j] = sc.nextInt();
             }
         }
         return matrix;
     }
 
-    public static void displayMatrix (int array[][]) {
-        System.out.println("Matrix ");
-        for( int arr[] : array){
-            for(int element : arr){
-                System.out.print(element+" ");
+    // Function to display the matrix
+    public static void displayMatrix(int array[][]) {
+        System.out.println("Matrix A:");
+        for (int arr[] : array) {
+            for (int element : arr) {
+                System.out.print(element + " ");
             }
             System.out.println();
         }
     }
-    public static int checkPeakC (int arr[][], int r , int l) {
-        int maximumRow = 0;
-        int minimumCol = Integer.MAX_VALUE;
-        for(int i = 0; i < r ; i++){
-            if( arr[i][0] > maximumRow) {
-                maximumRow = arr[i][0];
-            }
-        }
-        for(int j = 0; j< l; j++) {
-               
-            if(arr[0][j] < minimumCol ) {
-                minimumCol = arr[0][j];
-            }
-        }
 
-        System.out.println("maximum in rows is: "+maximumRow);
-        System.out.println("minimumu in columns is: "+minimumCol);
-        if(maximumRow == minimumCol) {
-            System.out.println("Peak column is: "+minimumCol);
-        }else{
-            System.out.println("There is no peak column in array");
+    // Function to find and display peak-columns
+    public static void findPeakColumns(int arr[][], int rows, int cols) {
+        boolean peakFound = false;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                boolean isPeak = true;
+                for (int k = 0; k < cols; k++) {
+                    if (arr[i][k] > arr[i][j]) {
+                        isPeak = false;
+                        break;
+                    }
+                }
+                if (isPeak) {
+                    for (int k = 0; k < rows; k++) {
+                        if (arr[k][j] < arr[i][j]) {
+                            isPeak = false;
+                            break;
+                        }
+                    }
+                }
+                // If arr[i][j] is a peak-column element, print it
+                if (isPeak) {
+                    System.out.println("(" + (i+1) + "," + (j+1) + ") = " + arr[i][j]);
+                    peakFound = true;
+                }
+            }
         }
-        return maximumRow;
+        if (!peakFound) {
+            System.out.println("There are no peak columns in the array.");
+        }
     }
 
     public static void main(String[] args) {
-        System.out.println("Enter rows");
+        System.out.println("Enter number of rows:");
         Scanner scanner = new Scanner(System.in);
         int rows = scanner.nextInt();
 
-        System.out.println("Enter cols");
+        System.out.println("Enter number of columns:");
         int cols = scanner.nextInt();
 
-        int arr [][] = readArray(scanner, rows, cols);
+        int arr[][] = readArray(scanner, rows, cols);
         displayMatrix(arr);
-        checkPeakC(arr, rows, cols);
+        findPeakColumns(arr, rows, cols);
         scanner.close();
     }
 }
